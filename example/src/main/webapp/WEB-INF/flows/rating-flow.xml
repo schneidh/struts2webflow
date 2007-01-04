@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.springframework.org/schema/webflow
+                          http://www.springframework.org/schema/webflow/spring-webflow-1.0.xsd">
+
+	<start-state idref="ageEnter" />
+
+	<view-state id="ageEnter" view="ageEnter">
+		<transition on="submit" to="AgeSave" />
+	</view-state>
+
+	<view-state id="ageEnterJSP" view="ageEnter">
+		<transition on="input" to="enterAgeJSP" />
+		<transition on="submit" to="AgeSave" />
+	</view-state>
+
+	<action-state id="AgeSave">
+		<action bean="webworkFlowAdapter"/>
+		<transition on="input" to="enterAgeJSP" />
+		<transition on="success" to="calcRate" />
+	</action-state>
+
+	<view-state id="calcRate" view="calcRate">
+		<transition on="finish" to="finish" />
+	</view-state>
+
+	<end-state id="finish" view="finish"/>
+</flow>
