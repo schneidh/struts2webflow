@@ -1,0 +1,49 @@
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="example" namespace="/example"
+		extends="struts-default">
+		<interceptors>
+			<interceptor name="sessionFlowExecKey"
+				class="com.googlecode.struts2webflow.SessionFlowExecKeyInterceptor">
+			</interceptor>
+			<interceptor name="flowScope"
+				class="com.googlecode.struts2webflow.FlowScopeInterceptor">
+				<param name="flowScope">age</param>
+			</interceptor>
+		</interceptors>
+		<action name="FlowAction"
+			class="com.googlecode.struts2webflow.FlowAction">
+			<interceptor-ref name="sessionFlowExecKey" />
+			<interceptor-ref name="defaultStack" />
+			<param name="flowId">rating-flow</param>
+			<result name="ageEnter" type="redirect">
+				AgeEnter.action
+			</result>
+			<result name="ageEnterJSP">/example/enterage.jsp</result>
+			<result name="calcRate" type="redirect">
+				CalcRate.action
+			</result>
+			<result name="finish">/example/finished.jsp</result>
+		</action>
+
+		<action name="AgeEnter" class="example.AgeAction">
+			<result>/example/enterage.jsp</result>
+		</action>
+
+		<action name="AgeSave" method="save"
+			class="example.AgeAction">
+			<interceptor-ref name="flowScope" />
+			<interceptor-ref name="defaultStack" />
+			<result type="redirect">CalcRate.action</result>
+		</action>
+
+		<action name="CalcRate" class="example.RateAction">
+			<interceptor-ref name="flowScope" />
+			<interceptor-ref name="defaultStack" />
+			<result>/example/displayrate.jsp</result>
+		</action>
+	</package>
+</struts>
