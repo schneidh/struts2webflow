@@ -11,7 +11,7 @@
 <p>
   <s:form action="FlowAction">
   	<s:hidden name="eventId" value="finish"/>
-    Your monthly premium would be $<ww:property value="rate"/>
+    Your monthly premium would be $<s:property value="rate"/>
     <s:submit value="Next"/>
   </s:form>
 </p>
