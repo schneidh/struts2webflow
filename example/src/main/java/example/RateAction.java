@@ -1,5 +1,6 @@
 package example;
 
+import com.googlecode.struts2webflow.annotations.FlowIn;
 import com.opensymphony.xwork2.ActionSupport;
 
 
@@ -9,7 +10,7 @@ import com.opensymphony.xwork2.ActionSupport;
  * calculates a insurance rate for the user.
  */
 public class RateAction extends ActionSupport {
-	
+	@FlowIn
 	private Integer age;
 
 	/**

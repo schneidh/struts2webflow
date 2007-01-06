@@ -13,6 +13,8 @@
 				class="com.googlecode.struts2webflow.FlowScopeInterceptor">
 				<param name="flowScope">age</param>
 			</interceptor>
+			<interceptor name="annotationflowScope"
+				class="com.googlecode.struts2webflow.annotations.AnnotationFlowScopeInterceptor"/>
 		</interceptors>
 		<action name="FlowAction"
 			class="com.googlecode.struts2webflow.FlowAction">
@@ -35,13 +37,13 @@
 
 		<action name="AgeSave" method="save"
 			class="example.AgeAction">
-			<interceptor-ref name="flowScope" />
+			<interceptor-ref name="annotationflowScope" />
 			<interceptor-ref name="defaultStack" />
 			<result type="redirect">CalcRate.action</result>
 		</action>
 
 		<action name="CalcRate" class="example.RateAction">
-			<interceptor-ref name="flowScope" />
+			<interceptor-ref name="annotationflowScope" />
 			<interceptor-ref name="defaultStack" />
 			<result>/example/displayrate.jsp</result>
 		</action>

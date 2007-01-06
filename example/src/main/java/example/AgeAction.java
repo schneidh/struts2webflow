@@ -1,5 +1,6 @@
 package example;
 
+import com.googlecode.struts2webflow.annotations.FlowOut;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
@@ -12,6 +13,7 @@ public class AgeAction extends ActionSupport {
 	 */
 	public static final String AGE_KEY = "RATING_AGE_KEY";
 	
+	@FlowOut
 	private Integer age;
 
 	public String save() {
