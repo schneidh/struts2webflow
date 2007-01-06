@@ -18,9 +18,6 @@ import com.opensymphony.xwork2.util.ValueStack;
 public class AnnotationFlowScopeInterceptor extends
 		AbstractFlowScopeInterceptor {
 
-	public void init() {
-	}
-
 	public String intercept(ActionInvocation invocation) throws Exception {
 		final Object action = invocation.getAction();
 		final ValueStack stack = invocation.getStack();
@@ -48,8 +45,5 @@ public class AnnotationFlowScopeInterceptor extends
 			String fieldName = f.getName();
 			flowScopeMap.put(fieldName, stack.findValue(fieldName));
 		}
-	}
-
-	public void destroy() {
 	}
 }
