@@ -19,6 +19,9 @@ import org.springframework.webflow.executor.FlowExecutorImpl;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 
+/**
+ * Helper class to access flow scope from outside the flow.
+ */
 public class ExternalFlowAccessHelper {
 	public static Map getFlowScope(FlowExecutor flowExecutor) {
 		FlowExecutionRepository repo = ((FlowExecutorImpl) flowExecutor)

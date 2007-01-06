@@ -33,7 +33,7 @@ public class FlowScopeInterceptor extends AbstractFlowScopeInterceptor {
 		final ValueStack stack = ActionContext.getContext().getValueStack();
 		Map flowScopeMap = getFlowScopeMap();
 
-		if (flowScope != null)
+		if (flowScope != null) {
 			for (int i = 0; i < flowScope.length; i++) {
 				String key = flowScope[i];
 				Object attribute = flowScopeMap.get(key);
@@ -46,8 +46,8 @@ public class FlowScopeInterceptor extends AbstractFlowScopeInterceptor {
 					stack.setValue(key, attribute);
 				}
 			}
-		String result = invocation.invoke();
-		return result;
+		}
+		return invocation.invoke();
 	}
 
 	/**

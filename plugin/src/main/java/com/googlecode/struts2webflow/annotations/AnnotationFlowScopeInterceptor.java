@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.googlecode.struts2webflow.AbstractFlowScopeInterceptor;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.util.AnnotationUtils;
@@ -17,6 +20,8 @@ import com.opensymphony.xwork2.util.ValueStack;
  */
 public class AnnotationFlowScopeInterceptor extends
 		AbstractFlowScopeInterceptor {
+	private static final Log LOG = LogFactory
+			.getLog(AnnotationFlowScopeInterceptor.class);
 
 	public String intercept(ActionInvocation invocation) throws Exception {
 		final Object action = invocation.getAction();
@@ -28,7 +33,15 @@ public class AnnotationFlowScopeInterceptor extends
 		AnnotationUtils.addAllFields(FlowIn.class, action.getClass(), fields);
 		for (Field f : fields) {
 			String fieldName = f.getName();
-			stack.setValue(fieldName, flowScopeMap.get(fieldName));
+			Object attribute = flowScopeMap.get(fieldName);
+			if (attribute != null) {
+				if (LOG.isDebugEnabled()) {
+					LOG.debug("flow scoped variable set " + fieldName + " = "
+							+ String.valueOf(attribute));
+				}
+
+				stack.setValue(fieldName, attribute);
+			}
 		}
 
 		return invocation.invoke();
@@ -43,7 +56,14 @@ public class AnnotationFlowScopeInterceptor extends
 		AnnotationUtils.addAllFields(FlowOut.class, action.getClass(), fields);
 		for (Field f : fields) {
 			String fieldName = f.getName();
-			flowScopeMap.put(fieldName, stack.findValue(fieldName));
+			Object value = stack.findValue(fieldName);
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("flow scoped variable saved " + fieldName + " = "
+						+ String.valueOf(value));
+			}
+
+			if (value != null)
+				flowScopeMap.put(fieldName, value);
 		}
 	}
 }
