@@ -4,26 +4,20 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.webflow.execution.RequestContext;
-import org.springframework.webflow.executor.FlowExecutor;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
-import com.opensymphony.xwork2.interceptor.Interceptor;
-import com.opensymphony.xwork2.interceptor.PreResultListener;
 import com.opensymphony.xwork2.util.ValueStack;
 
 /**
  * FlowScopeInterceptor is responsible for mapping items in flow scope to the
  * properties on the webwork actions executing in the webflow.
  */
-public class FlowScopeInterceptor implements Interceptor, PreResultListener {
+public class FlowScopeInterceptor extends AbstractFlowScopeInterceptor {
 	private static final Log LOG = LogFactory
 			.getLog(FlowScopeInterceptor.class);
 
 	private String[] flowScope = null;
-	
-	private FlowExecutor flowExecutor;
 	
 	// list of flow scoped properties
 	public void setFlowScope(String s) {
@@ -32,41 +26,6 @@ public class FlowScopeInterceptor implements Interceptor, PreResultListener {
 		}
 	}
 
-	public FlowExecutor getFlowExecutor() {
-		return flowExecutor;
-	}
-
-	public void setFlowExecutor(FlowExecutor flowExecutor) {
-		this.flowExecutor = flowExecutor;
-	}
-
-	public void init() {
-	}
-
-	/**
-	 * @return true if we are are executing within the workflow.
-	 */
-	protected boolean inWorkflow() {
-		Map contextMap = ActionContext.getContext().getContextMap();
-		RequestContext webflowContext = (RequestContext) contextMap
-				.get(Struts2FlowAdapter.REQUEST_CONTEXT);
-		return webflowContext != null;
-	}
-	
-	/**
-	 * @return flow scope from the webflow if found, otherwise the readonly copy
-	 *         from the session, or null if not found in either location.
-	 */
-	protected Map getFlowScopeMap() {
-		if (inWorkflow()) {
-			Map contextMap = ActionContext.getContext().getContextMap();
-			RequestContext webflowContext = (RequestContext) contextMap
-					.get(Struts2FlowAdapter.REQUEST_CONTEXT);
-			return webflowContext.getFlowScope().asMap();
-		} else {
-			return ExternalFlowAccessHelper.getFlowScope(flowExecutor);
-		}
-	}
 
 	public String intercept(ActionInvocation invocation) throws Exception {
 		invocation.addPreResultListener(this);
@@ -111,8 +70,5 @@ public class FlowScopeInterceptor implements Interceptor, PreResultListener {
 					flowScopeMap.put(key, value);
 			}
 		}
-	}
-
-	public void destroy() {
 	}
 }
