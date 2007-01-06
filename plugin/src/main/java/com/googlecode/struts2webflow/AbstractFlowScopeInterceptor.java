@@ -75,7 +75,7 @@ public abstract class AbstractFlowScopeInterceptor implements Interceptor,
 					.get(Struts2FlowAdapter.REQUEST_CONTEXT);
 			return webflowContext.getFlowScope().asMap();
 		} else {
-			return ExternalFlowAccessHelper.getFlowScope(getFlowExecutor());
+			return getFlowScopeExternal(getFlowExecutor());
 		}
 	}
 
