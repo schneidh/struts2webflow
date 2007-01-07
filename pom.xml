@@ -6,7 +6,7 @@
 	<groupId>com.googlecode.struts2webflow</groupId>
 	<artifactId>struts2webflow-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<name>Struts2 Spring Webflow Plugin Parent</name>
 
 	<modules>
