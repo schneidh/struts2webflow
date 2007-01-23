@@ -6,13 +6,26 @@
 	<groupId>com.googlecode.struts2webflow</groupId>
 	<artifactId>struts2webflow-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.1</version>
 	<name>Struts2 Spring Webflow Plugin Parent</name>
-
+	<url>http://code.google.com/p/struts2webflow/</url>
+	<description>A Spring Webflow Plugin for Struts 2</description>
 	<modules>
 		<module>example</module>
 		<module>plugin</module>
 	</modules>
+	<licenses>
+      <license>
+        <name>The Apache Software License, Version 2.0</name>
+        <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        <distribution>repo</distribution>
+      </license>
+    </licenses>
+    <scm>
+       <connection>scm:svn:https://struts2webflow.googlecode.com/svn/trunk/</connection>
+       <developerConnection>scm:svn:https://struts2webflow.googlecode.com/svn/trunk/</developerConnection>
+       <url>http://struts2webflow.googlecode.com/svn/trunk/</url>
+    </scm>
 
 	<dependencies>
 		<dependency>
