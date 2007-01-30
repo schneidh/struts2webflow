@@ -17,6 +17,7 @@ import org.springframework.webflow.execution.FlowExecution;
 import org.springframework.webflow.execution.RequestContext;
 import org.springframework.webflow.execution.repository.FlowExecutionKey;
 import org.springframework.webflow.execution.repository.FlowExecutionRepository;
+import org.springframework.webflow.execution.repository.FlowExecutionRestorationFailureException;
 import org.springframework.webflow.executor.FlowExecutor;
 import org.springframework.webflow.executor.FlowExecutorImpl;
 
@@ -100,11 +101,15 @@ public abstract class AbstractFlowScopeInterceptor implements Interceptor,
 		// first check for flow exec key as parameter
 		String flowExecKey = (String) actionInvocation.getInvocationContext()
 				.getParameters().get(FLOW_EXECUTION_KEY);
-		if (flowExecKey == null) {
-			// second look in the session
-			Map sessionMap = actionContext.getSession();
-			flowExecKey = (String) sessionMap.get(sessionKey);
-		}
+		if(flowExecKey == null) {
+                    // second look in the session
+                    Map sessionMap = actionContext.getSession();
+                    flowExecKey = (String) sessionMap.get(sessionKey);
+                    if(flowExecKey == null) {
+                        throw new FlowExecKeyNotFoundException(
+                            "FlowExecutionKey not found in request or session.");
+                    }
+                }
 		FlowExecutionKey key = repo.parseFlowExecutionKey(flowExecKey);
 		FlowExecution flowExecution = repo.getFlowExecution(key);
 		MutableAttributeMap attrMap = flowExecution.getActiveSession()
