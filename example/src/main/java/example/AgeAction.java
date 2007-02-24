@@ -8,24 +8,24 @@ import com.opensymphony.xwork2.ActionSupport;
  * in the session.
  */
 public class AgeAction extends ActionSupport {
-	/**
-	 * The place in the session where the user's age is stored.
-	 */
-	public static final String AGE_KEY = "RATING_AGE_KEY";
-	
-	@FlowOut
-	private Integer age;
+    /**
+     * The place in the session where the user's age is stored.
+     */
+    public static final String AGE_KEY = "RATING_AGE_KEY";
 
-	public String save() {
-		// flow scope interceptor handles saving the age
-		return SUCCESS;
-	}
+    @FlowOut
+    private Integer age;
 
-	public Integer getAge() {
-		return age;
-	}
+    public String save() {
+        // flow scope interceptor handles saving the age
+        return SUCCESS;
+    }
 
-	public void setAge(Integer age) {
-		this.age = age;
-	}
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
 }
