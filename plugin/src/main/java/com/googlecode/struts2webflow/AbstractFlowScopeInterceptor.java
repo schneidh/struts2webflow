@@ -31,150 +31,151 @@ import com.opensymphony.xwork2.interceptor.PreResultListener;
  * The base class for all interceptors that need to access flow scope.
  */
 public abstract class AbstractFlowScopeInterceptor implements Interceptor,
-		PreResultListener {
-	/**
-	 * Parameter name for the flow execution key. (If submitted as a parameter)
-	 */
-	public static final String FLOW_EXECUTION_KEY = "flowExecutionKey";
+    PreResultListener {
+    /**
+     * Parameter name for the flow execution key. (If submitted as a parameter)
+     */
+    public static final String FLOW_EXECUTION_KEY = "flowExecutionKey";
 
-	/**
-	 * The spring id of the flow executor bean for this action. If this is not
-	 * set, it is assumed that the flow executor will be configured with a
-	 * spring id of 'flowExecutor'.
-	 */
-	private String flowExecutorBean;
+    /**
+     * The spring id of the flow executor bean for this action. If this is not
+     * set, it is assumed that the flow executor will be configured with a
+     * spring id of 'flowExecutor'.
+     */
+    private String flowExecutorBean;
 
-	/**
-	 * The service responsible for launching and signaling webwork-originating
-	 * events in flow executions.
-	 */
-	private FlowExecutor flowExecutor;
+    /**
+     * The service responsible for launching and signaling webwork-originating
+     * events in flow executions.
+     */
+    private FlowExecutor flowExecutor;
 
-	/**
-	 * Location of the flow exec key if stored in session.
-	 */
-	private String sessionKey = SessionFlowExecKeyInterceptor.DEFAULT_SESSION_KEY;
+    /**
+     * Location of the flow exec key if stored in session.
+     */
+    private String sessionKey = SessionFlowExecKeyInterceptor.DEFAULT_SESSION_KEY;
 
-	/**
-	 * @return true if we are are executing within the workflow.
-	 */
-	protected boolean inWorkflow() {
-		Map contextMap = ActionContext.getContext().getContextMap();
-		RequestContext webflowContext = (RequestContext) contextMap
-				.get(Struts2FlowAdapter.REQUEST_CONTEXT);
-		return webflowContext != null;
-	}
+    /**
+     * @return true if we are are executing within the workflow.
+     */
+    protected boolean inWorkflow() {
+        Map contextMap = ActionContext.getContext().getContextMap();
+        RequestContext webflowContext = (RequestContext) contextMap
+            .get(Struts2FlowAdapter.REQUEST_CONTEXT);
+        return webflowContext != null;
+    }
 
-	/**
-	 * @return flow scope from the webflow if found, otherwise the readonly copy
-	 *         from the session, or null if not found in either location.
-	 */
-	protected Map getFlowScopeMap() {
-		if (inWorkflow()) {
-			Map contextMap = ActionContext.getContext().getContextMap();
-			RequestContext webflowContext = (RequestContext) contextMap
-					.get(Struts2FlowAdapter.REQUEST_CONTEXT);
-			return webflowContext.getFlowScope().asMap();
-		} else {
-			return getFlowScopeExternal(getFlowExecutor());
-		}
-	}
+    /**
+     * @return flow scope from the webflow if found, otherwise the readonly copy
+     *         from the session, or null if not found in either location.
+     */
+    protected Map getFlowScopeMap() {
+        if(inWorkflow()) {
+            Map contextMap = ActionContext.getContext().getContextMap();
+            RequestContext webflowContext = (RequestContext) contextMap
+                .get(Struts2FlowAdapter.REQUEST_CONTEXT);
+            return webflowContext.getFlowScope().asMap();
+        } else {
+            return getFlowScopeExternal(getFlowExecutor());
+        }
+    }
 
-	/**
-	 * Helper method to access flow scope from outside the flow.
-	 */
-	protected Map getFlowScopeExternal(FlowExecutor flowExecutor) {
-		FlowExecutionRepository repo = ((FlowExecutorImpl) flowExecutor)
-				.getExecutionRepository();
-		final ActionContext actionContext = ActionContext.getContext();
-		final ActionInvocation actionInvocation = actionContext
-				.getActionInvocation();
-		final ServletContext servletContext = ServletActionContext
-				.getServletContext();
-		final HttpServletRequest request = ServletActionContext.getRequest();
-		final HttpServletResponse response = ServletActionContext.getResponse();
+    /**
+     * Helper method to access flow scope from outside the flow.
+     */
+    protected Map getFlowScopeExternal(FlowExecutor flowExecutor) {
+        FlowExecutionRepository repo = ((FlowExecutorImpl) flowExecutor)
+            .getExecutionRepository();
+        final ActionContext actionContext = ActionContext.getContext();
+        final ActionInvocation actionInvocation = actionContext
+            .getActionInvocation();
+        final ServletContext servletContext = ServletActionContext
+            .getServletContext();
+        final HttpServletRequest request = ServletActionContext.getRequest();
+        final HttpServletResponse response = ServletActionContext
+            .getResponse();
 
-		ExternalContext context = new Struts2ExternalContext(actionInvocation,
-				servletContext, request, response);
-		ExternalContextHolder.setExternalContext(context);
+        ExternalContext context = new Struts2ExternalContext(
+            actionInvocation, servletContext, request, response);
+        ExternalContextHolder.setExternalContext(context);
 
-		// first check for flow exec key as parameter
-		String flowExecKey = (String) actionInvocation.getInvocationContext()
-				.getParameters().get(FLOW_EXECUTION_KEY);
-		if(flowExecKey == null) {
-                    // second look in the session
-                    Map sessionMap = actionContext.getSession();
-                    flowExecKey = (String) sessionMap.get(sessionKey);
-                    if(flowExecKey == null) {
-                        throw new FlowExecKeyNotFoundException(
-                            "FlowExecutionKey not found in request or session.");
-                    }
-                }
-		FlowExecutionKey key = repo.parseFlowExecutionKey(flowExecKey);
-		FlowExecution flowExecution = repo.getFlowExecution(key);
-		MutableAttributeMap attrMap = flowExecution.getActiveSession()
-				.getScope();
-		return attrMap.asMap();
-	}
+        // first check for flow exec key as parameter
+        String flowExecKey = (String) actionInvocation.getInvocationContext()
+            .getParameters().get(FLOW_EXECUTION_KEY);
+        if(flowExecKey == null) {
+            // second look in the session
+            Map sessionMap = actionContext.getSession();
+            flowExecKey = (String) sessionMap.get(sessionKey);
+            if(flowExecKey == null) {
+                throw new FlowExecKeyNotFoundException(
+                    "FlowExecutionKey not found in request or session.");
+            }
+        }
+        FlowExecutionKey key = repo.parseFlowExecutionKey(flowExecKey);
+        FlowExecution flowExecution = repo.getFlowExecution(key);
+        MutableAttributeMap attrMap = flowExecution.getActiveSession()
+            .getScope();
+        return attrMap.asMap();
+    }
 
-	public void init() {
-	}
+    public void init() {
+    }
 
-	public void destroy() {
-	}
+    public void destroy() {
+    }
 
-	/**
-	 * Returns the flow executor used by this interceptor.
-	 * 
-	 * @return the flow executor
-	 */
-	public FlowExecutor getFlowExecutor() {
-		if (flowExecutorBean != null) {
-			ServletContext servletContext = ServletActionContext
-					.getServletContext();
-			WebApplicationContext context = WebApplicationContextUtils
-					.getRequiredWebApplicationContext(servletContext);
-			if (context.containsBean(flowExecutorBean)) {
-				flowExecutor = (FlowExecutor) context.getBean(flowExecutorBean,
-						FlowExecutor.class);
-			} else {
-				throw new BeanCreationException("Spring bean: '"
-						+ flowExecutorBean
-						+ "' Not found in WebApplicationContext!");
-			}
-		}
-		if (flowExecutor == null) {
-			throw new ConfigurationException("flowExecutor not found,"
-					+ " please provide a flowExecutor for this FlowAction");
-		}
-		return flowExecutor;
-	}
+    /**
+     * Returns the flow executor used by this interceptor.
+     * 
+     * @return the flow executor
+     */
+    public FlowExecutor getFlowExecutor() {
+        if(flowExecutorBean != null) {
+            ServletContext servletContext = ServletActionContext
+                .getServletContext();
+            WebApplicationContext context = WebApplicationContextUtils
+                .getRequiredWebApplicationContext(servletContext);
+            if(context.containsBean(flowExecutorBean)) {
+                flowExecutor = (FlowExecutor) context.getBean(
+                    flowExecutorBean, FlowExecutor.class);
+            } else {
+                throw new BeanCreationException("Spring bean: '"
+                    + flowExecutorBean
+                    + "' Not found in WebApplicationContext!");
+            }
+        }
+        if(flowExecutor == null) {
+            throw new ConfigurationException("flowExecutor not found,"
+                + " please provide a flowExecutor for this FlowAction");
+        }
+        return flowExecutor;
+    }
 
-	public void setFlowExecutor(FlowExecutor flowExecutor) {
-		this.flowExecutor = flowExecutor;
-	}
+    public void setFlowExecutor(FlowExecutor flowExecutor) {
+        this.flowExecutor = flowExecutor;
+    }
 
-	/**
-	 * @return the spring id of the flow executor.
-	 */
-	public String getFlowExecutorBean() {
-		return flowExecutorBean;
-	}
+    /**
+     * @return the spring id of the flow executor.
+     */
+    public String getFlowExecutorBean() {
+        return flowExecutorBean;
+    }
 
-	/**
-	 * The spring id of the flow executor.
-	 * 
-	 * @param flowExecutorBean
-	 */
-	public void setFlowExecutorBean(String flowExecutorBean) {
-		this.flowExecutorBean = flowExecutorBean;
-	}
+    /**
+     * The spring id of the flow executor.
+     * 
+     * @param flowExecutorBean
+     */
+    public void setFlowExecutorBean(String flowExecutorBean) {
+        this.flowExecutorBean = flowExecutorBean;
+    }
 
-	public String getSessionKey() {
-		return sessionKey;
-	}
+    public String getSessionKey() {
+        return sessionKey;
+    }
 
-	public void setSessionKey(String sessionKey) {
-		this.sessionKey = sessionKey;
-	}
+    public void setSessionKey(String sessionKey) {
+        this.sessionKey = sessionKey;
+    }
 }
