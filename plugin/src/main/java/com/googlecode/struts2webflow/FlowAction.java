@@ -4,6 +4,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.ServletActionContext;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.web.context.WebApplicationContext;
@@ -12,6 +14,9 @@ import org.springframework.webflow.context.ExternalContext;
 import org.springframework.webflow.execution.support.ApplicationView;
 import org.springframework.webflow.executor.FlowExecutor;
 import org.springframework.webflow.executor.ResponseInstruction;
+import org.springframework.webflow.executor.support.FlowExecutorArgumentExtractionException;
+import org.springframework.webflow.executor.support.FlowExecutorArgumentExtractor;
+import org.springframework.webflow.executor.support.RequestParameterFlowExecutorArgumentHandler;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
@@ -22,7 +27,10 @@ import com.opensymphony.xwork2.config.ConfigurationException;
  * Webwork action responsible for executing the spring webflow.
  */
 public class FlowAction extends ActionSupport {
-	/**
+
+        private static final Log LOG = LogFactory.getLog(FlowAction.class);
+
+        /**
 	 * The spring id of the flow executor bean for this action. If this is not
 	 * set, it is assumed that the flow executor will be configured with a
 	 * spring id of 'flowExecutor'.
@@ -57,6 +65,9 @@ public class FlowAction extends ActionSupport {
 				.getActionInvocation();
 		ExternalContext context = new Struts2ExternalContext(actionInvocation,
 				servletContext, request, response);
+                if(eventId == null) {
+                    extractEventId(context);
+                }
 		Struts2RequestHandler handler = createRequestHandler();
 		handler.setFlowExecutionKey(flowExecutionKey);
 		handler.setEventId(eventId);
@@ -196,4 +207,20 @@ public class FlowAction extends ActionSupport {
 	public void setFlowExecutorBean(String flowExecutorBean) {
 		this.flowExecutorBean = flowExecutorBean;
 	}
+        
+        /**
+         * Extracts the flow execution event id from the external context
+         * @param context the context in which a external user event occured
+         */
+        public void extractEventId(ExternalContext context) {
+            FlowExecutorArgumentExtractor extractor = new RequestParameterFlowExecutorArgumentHandler();
+            try {
+                eventId = extractor.extractEventId(context);
+            } catch(FlowExecutorArgumentExtractionException e) {
+                if(LOG.isDebugEnabled()) {
+                    LOG
+                        .debug("no eventId present! Assuming the launch or refresh of flow!");
+                }
+            }
+        }
 }
