@@ -3,7 +3,7 @@
 	<groupId>com.google.code.struts2webflow</groupId>
 	<artifactId>struts2webflow-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0.4-SNAPSHOT</version>
+	<version>1.0.4</version>
 	<name>Struts2 Spring Webflow Plugin Parent</name>
 	<url>http://code.google.com/p/struts2webflow/</url>
 	<description>A Spring Webflow Plugin for Struts 2</description>
@@ -19,9 +19,9 @@
       </license>
     </licenses>
     <scm>
-       <connection>scm:svn:https://struts2webflow.googlecode.com/svn/trunk/</connection>
-       <developerConnection>scm:svn:https://struts2webflow.googlecode.com/svn/trunk/</developerConnection>
-       <url>http://struts2webflow.googlecode.com/svn/trunk/</url>
+       <connection>scm:svn:https://struts2webflow.googlecode.com/svn/tags/struts2webflow-parent-1.0.4</connection>
+       <developerConnection>scm:svn:https://struts2webflow.googlecode.com/svn/tags/struts2webflow-parent-1.0.4</developerConnection>
+       <url>http://struts2webflow.googlecode.com/svn/tags/struts2webflow-parent-1.0.4</url>
     </scm>
 
 	<dependencies>
@@ -38,7 +38,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webflow</artifactId>
-			<version>1.0</version>
+			<version>1.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
