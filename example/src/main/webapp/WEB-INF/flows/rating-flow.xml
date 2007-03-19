@@ -16,7 +16,7 @@
 	</view-state>
 
 	<action-state id="AgeSave">
-		<action bean="webworkFlowAdapter"/>
+		<action bean="struts2FlowAdapter"/>
 		<transition on="input" to="enterAgeJSP" />
 		<transition on="success" to="calcRate" />
 	</action-state>

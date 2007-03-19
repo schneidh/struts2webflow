@@ -17,34 +17,34 @@ import com.opensymphony.xwork2.ActionInvocation;
  */
 public class Struts2ExternalContext extends ServletExternalContext {
 
-	private ActionInvocation actionInvocation;
+    private ActionInvocation actionInvocation;
 
-	/**
-	 * Constructs a new WebworkExternalContext
-	 * 
-	 * @param actionInvocation
-	 * @param servletContext
-	 * @param request
-	 * @param response
-	 */
-	public Struts2ExternalContext(ActionInvocation actionInvocation,
-			ServletContext servletContext, HttpServletRequest request,
-			HttpServletResponse response) {
-		super(servletContext, request, response);
-		this.actionInvocation = actionInvocation;
-	}
+    /**
+     * Constructs a new WebworkExternalContext
+     * 
+     * @param actionInvocation
+     * @param servletContext
+     * @param request
+     * @param response
+     */
+    public Struts2ExternalContext(ActionInvocation actionInvocation,
+        ServletContext servletContext, HttpServletRequest request,
+        HttpServletResponse response) {
+        super(servletContext, request, response);
+        this.actionInvocation = actionInvocation;
+    }
 
-	/**
-	 * @return ActionInvocation
-	 */
-	public ActionInvocation getActionInvocation() {
-		return actionInvocation;
-	}
+    /**
+     * @return ActionInvocation
+     */
+    public ActionInvocation getActionInvocation() {
+        return actionInvocation;
+    }
 
-	/**
-	 * @return ActionContext
-	 */
-	public ActionContext getActionContext() {
-		return ActionContext.getContext();
-	}
+    /**
+     * @return ActionContext
+     */
+    public ActionContext getActionContext() {
+        return ActionContext.getContext();
+    }
 }

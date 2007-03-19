@@ -7,12 +7,7 @@
 		extends="struts-default">
 		<interceptors>
 			<interceptor name="sessionFlowExecKey"
-				class="com.googlecode.struts2webflow.SessionFlowExecKeyInterceptor">
-			</interceptor>
-			<interceptor name="flowScope"
-				class="com.googlecode.struts2webflow.FlowScopeInterceptor">
-				<param name="flowScope">age</param>
-			</interceptor>
+				class="com.googlecode.struts2webflow.SessionFlowExecKeyInterceptor"/>
 			<interceptor name="annotationflowScope"
 				class="com.googlecode.struts2webflow.annotations.AnnotationFlowScopeInterceptor"/>
 		</interceptors>

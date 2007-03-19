@@ -20,5 +20,5 @@
 		<flow:location path="/WEB-INF/flows/**-flow.xml"/>
 	</flow:registry>
 	
-	<bean id="webworkFlowAdapter" class="com.googlecode.struts2webflow.Struts2FlowAdapter"></bean>
+	<bean id="struts2FlowAdapter" class="com.googlecode.struts2webflow.Struts2FlowAdapter"></bean>
 </beans>
