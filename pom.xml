@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.google.code.struts2webflow</groupId>
-	<artifactId>struts2webflow-parent</artifactId>
+	<artifactId>struts2webflow-main</artifactId>
 	<packaging>pom</packaging>
 	<version>1.0.5-SNAPSHOT</version>
-	<name>Struts2 Spring Webflow Plugin Parent</name>
+	<name>Struts2 Spring Webflow Plugin Main</name>
 	<url>http://code.google.com/p/struts2webflow/</url>
 	<description>A Spring Webflow Plugin for Struts 2</description>
 	<modules>
@@ -23,41 +23,4 @@
        <developerConnection>scm:svn:https://struts2webflow.googlecode.com/svn/trunk/</developerConnection>
        <url>http://struts2webflow.googlecode.com/svn/trunk/</url>
     </scm>
-
-	<dependencies>
-		<dependency>
-			<groupId>org.apache.struts</groupId>
-			<artifactId>struts2-core</artifactId>
-			<version>2.0.6</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.struts</groupId>
-			<artifactId>struts2-spring-plugin</artifactId>
-			<version>2.0.6</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webflow</artifactId>
-			<version>1.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.4</version>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<configuration>
-						<source>1.5</source>
-						<target>1.5</target>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
 </project>
