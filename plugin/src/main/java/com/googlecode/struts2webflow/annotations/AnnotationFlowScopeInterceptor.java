@@ -19,51 +19,56 @@ import com.opensymphony.xwork2.util.ValueStack;
  * annonations.
  */
 public class AnnotationFlowScopeInterceptor extends
-		AbstractFlowScopeInterceptor {
-	private static final Log LOG = LogFactory
-			.getLog(AnnotationFlowScopeInterceptor.class);
+    AbstractFlowScopeInterceptor {
+    private static final Log LOG = LogFactory
+        .getLog(AnnotationFlowScopeInterceptor.class);
 
-	public String intercept(ActionInvocation invocation) throws Exception {
-		final Object action = invocation.getAction();
-		final ValueStack stack = invocation.getStack();
-		final Map flowScopeMap = getFlowScopeMap();
+    public String intercept(ActionInvocation invocation) throws Exception {
+        if(inWorkflow()) {
+            final Object action = invocation.getAction();
+            final ValueStack stack = invocation.getStack();
+            final Map flowScopeMap = getFlowScopeMap();
 
-		invocation.addPreResultListener(this);
-		List<Field> fields = new ArrayList<Field>();
-		AnnotationUtils.addAllFields(FlowIn.class, action.getClass(), fields);
-		for (Field f : fields) {
-			String fieldName = f.getName();
-			Object attribute = flowScopeMap.get(fieldName);
-			if (attribute != null) {
-				if (LOG.isDebugEnabled()) {
-					LOG.debug("flow scoped variable set " + fieldName + " = "
-							+ String.valueOf(attribute));
-				}
+            invocation.addPreResultListener(this);
+            List<Field> fields = new ArrayList<Field>();
+            AnnotationUtils.addAllFields(FlowIn.class, action.getClass(),
+                fields);
+            for(Field f : fields) {
+                String fieldName = f.getName();
+                Object attribute = flowScopeMap.get(fieldName);
+                if(attribute != null) {
+                    if(LOG.isDebugEnabled()) {
+                        LOG.debug("flow scoped variable set " + fieldName
+                            + " = " + String.valueOf(attribute));
+                    }
 
-				stack.setValue(fieldName, attribute);
-			}
-		}
+                    stack.setValue(fieldName, attribute);
+                }
+            }
+        }
+        return invocation.invoke();
+    }
 
-		return invocation.invoke();
-	}
+    public void beforeResult(ActionInvocation invocation, String arg1) {
+        if(inWorkflow()) {
+            final Object action = invocation.getAction();
+            final ValueStack stack = invocation.getStack();
+            final Map flowScopeMap = getFlowScopeMap();
 
-	public void beforeResult(ActionInvocation invocation, String arg1) {
-		final Object action = invocation.getAction();
-		final ValueStack stack = invocation.getStack();
-		final Map flowScopeMap = getFlowScopeMap();
+            List<Field> fields = new ArrayList<Field>();
+            AnnotationUtils.addAllFields(FlowOut.class, action.getClass(),
+                fields);
+            for(Field f : fields) {
+                String fieldName = f.getName();
+                Object value = stack.findValue(fieldName);
+                if(LOG.isDebugEnabled()) {
+                    LOG.debug("flow scoped variable saved " + fieldName
+                        + " = " + String.valueOf(value));
+                }
 
-		List<Field> fields = new ArrayList<Field>();
-		AnnotationUtils.addAllFields(FlowOut.class, action.getClass(), fields);
-		for (Field f : fields) {
-			String fieldName = f.getName();
-			Object value = stack.findValue(fieldName);
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("flow scoped variable saved " + fieldName + " = "
-						+ String.valueOf(value));
-			}
-
-			if (value != null)
-				flowScopeMap.put(fieldName, value);
-		}
-	}
+                if(value != null)
+                    flowScopeMap.put(fieldName, value);
+            }
+        }
+    }
 }

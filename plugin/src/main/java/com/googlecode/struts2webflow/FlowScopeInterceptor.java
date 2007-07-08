@@ -27,22 +27,25 @@ public class FlowScopeInterceptor extends AbstractFlowScopeInterceptor {
     }
 
     public String intercept(ActionInvocation invocation) throws Exception {
-        invocation.addPreResultListener(this);
+        if(inWorkflow()) {
+            invocation.addPreResultListener(this);
 
-        final ValueStack stack = ActionContext.getContext().getValueStack();
-        Map flowScopeMap = getFlowScopeMap();
+            final ValueStack stack = ActionContext.getContext()
+                .getValueStack();
+            Map flowScopeMap = getFlowScopeMap();
 
-        if(flowScope != null) {
-            for(int i = 0; i < flowScope.length; i++) {
-                String key = flowScope[i];
-                Object attribute = flowScopeMap.get(key);
-                if(attribute != null) {
-                    if(LOG.isDebugEnabled()) {
-                        LOG.debug("flow scoped variable set " + key + " = "
-                            + String.valueOf(attribute));
+            if(flowScope != null) {
+                for(int i = 0; i < flowScope.length; i++) {
+                    String key = flowScope[i];
+                    Object attribute = flowScopeMap.get(key);
+                    if(attribute != null) {
+                        if(LOG.isDebugEnabled()) {
+                            LOG.debug("flow scoped variable set " + key
+                                + " = " + String.valueOf(attribute));
+                        }
+
+                        stack.setValue(key, attribute);
                     }
-
-                    stack.setValue(key, attribute);
                 }
             }
         }
