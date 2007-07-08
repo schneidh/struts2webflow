@@ -100,8 +100,9 @@ public abstract class AbstractFlowScopeInterceptor implements Interceptor,
         ExternalContextHolder.setExternalContext(context);
 
         // first check for flow exec key as parameter
-        String flowExecKey = (String) actionInvocation.getInvocationContext()
+        String flowExecKeyArray[] = (String[]) actionInvocation.getInvocationContext()
             .getParameters().get(FLOW_EXECUTION_KEY);
+	String flowExecKey = (flowExecKeyArray != null) ? flowExecKeyArray[0] : null;
         if(flowExecKey == null) {
             // second look in the session
             Map sessionMap = actionContext.getSession();
