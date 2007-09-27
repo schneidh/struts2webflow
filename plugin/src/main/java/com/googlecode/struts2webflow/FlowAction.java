@@ -43,17 +43,25 @@ public class FlowAction extends ActionSupport {
      */
     private FlowExecutor flowExecutor;
 
-    /** flowId flow parameter */
+    private FlowExecutorArgumentExtractor flowExecutorArgumentExtractor;
+
+    /**
+     * flowId flow parameter
+     */
     private String flowId;
 
-    /** flowExecutionKey flow parameter */
+    /**
+     * flowExecutionKey flow parameter
+     */
     private String flowExecutionKey;
 
-    /** eventId flow parameter */
+    /**
+     * eventId flow parameter
+     */
     private String eventId;
 
     /**
-     * @see com.opensymphony.xwork.ActionSupport#execute()
+     * @see com.opensymphony.xwork2.ActionSupport#execute()
      */
     public String execute() throws Exception {
         ServletContext servletContext = ServletActionContext
@@ -81,7 +89,7 @@ public class FlowAction extends ActionSupport {
     /**
      * Factory method that creates a new helper for processing a request into
      * this flow controller.
-     * 
+     *
      * @return the controller helper
      */
     protected Struts2RequestHandler createRequestHandler() {
@@ -92,10 +100,11 @@ public class FlowAction extends ActionSupport {
 
     /**
      * Return the appropriate result based on the response.
-     * 
+     *
      * @param response
      * @param context
      * @param actionInvocation
+     *
      * @return String
      */
     protected String toResult(ResponseInstruction response,
@@ -158,7 +167,7 @@ public class FlowAction extends ActionSupport {
 
     /**
      * Returns the flow executor used by this controller.
-     * 
+     *
      * @return the flow executor
      */
     public FlowExecutor getFlowExecutor() {
@@ -183,9 +192,20 @@ public class FlowAction extends ActionSupport {
         return flowExecutor;
     }
 
+    public FlowExecutorArgumentExtractor getFlowExecutorArgumentExtractor() {
+        if(flowExecutorArgumentExtractor == null) {
+            flowExecutorArgumentExtractor = new RequestParameterFlowExecutorArgumentHandler();
+        }
+        return flowExecutorArgumentExtractor;
+    }
+
+    public void setFlowExecutorArgumentExtractor(FlowExecutorArgumentExtractor flowExecutorArgumentExtractor) {
+        this.flowExecutorArgumentExtractor = flowExecutorArgumentExtractor;
+    }
+
     /**
      * Configures the flow executor implementation to use.
-     * 
+     *
      * @param flowExecutor
      */
     public void setFlowExecutor(FlowExecutor flowExecutor) {
@@ -201,7 +221,7 @@ public class FlowAction extends ActionSupport {
 
     /**
      * The spring id of the flow executor.
-     * 
+     *
      * @param flowExecutorBean
      */
     public void setFlowExecutorBean(String flowExecutorBean) {
@@ -210,16 +230,16 @@ public class FlowAction extends ActionSupport {
 
     /**
      * Extracts the flow execution event id from the external context
+     *
      * @param context the context in which a external user event occured
      */
     public void extractEventId(ExternalContext context) {
-        FlowExecutorArgumentExtractor extractor = new RequestParameterFlowExecutorArgumentHandler();
+        FlowExecutorArgumentExtractor extractor = getFlowExecutorArgumentExtractor();
         try {
             eventId = extractor.extractEventId(context);
         } catch(FlowExecutorArgumentExtractionException e) {
             if(LOG.isDebugEnabled()) {
-                LOG
-                    .debug("no eventId present! Assuming the launch or refresh of flow!");
+                LOG.debug("no eventId present! Assuming the launch or refresh of flow!", e);
             }
         }
     }
