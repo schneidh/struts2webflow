@@ -58,7 +58,7 @@ public class FlowAction extends ActionSupport {
     /**
      * eventId flow parameter
      */
-    private String eventId;
+    private String eve ntId;
 
     /**
      * @see com.opensymphony.xwork2.ActionSupport#execute()
