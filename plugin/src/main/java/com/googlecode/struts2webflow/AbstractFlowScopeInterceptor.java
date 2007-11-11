@@ -42,7 +42,7 @@ public abstract class AbstractFlowScopeInterceptor implements Interceptor,
      * set, it is assumed that the flow executor will be configured with a
      * spring id of 'flowExecutor'.
      */
-    private String flowExecutorBean;
+    private String flowExecutorBean = "flowExecutor";
 
     /**
      * The service responsible for launching and signaling webwork-originating
