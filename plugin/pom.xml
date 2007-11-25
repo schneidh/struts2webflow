@@ -42,6 +42,11 @@
 			</url>
 		</repository>
 	</distributionManagement>
+    <scm>
+       <connection>scm:svn:https://struts2webflow.googlecode.com/svn/trunk/</connection>
+       <developerConnection>scm:svn:https://struts2webflow.googlecode.com/svn/trunk/</developerConnection>
+       <url>http://struts2webflow.googlecode.com/svn/trunk/</url>
+    </scm>
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.struts</groupId>
