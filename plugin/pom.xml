@@ -4,7 +4,7 @@
 	<artifactId>struts2webflow-plugin</artifactId>
 	<packaging>jar</packaging>
 	<name>Struts Spring Webflow Plugin</name>
-	<version>1.0.5</version>
+	<version>1.0.6-SNAPSHOT</version>
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -42,9 +42,9 @@
 		</repository>
 	</distributionManagement>
     <scm>
-       <connection>scm:svn:https://struts2webflow.googlecode.com/svn/tags/struts2webflow-plugin-1.0.5</connection>
-       <developerConnection>scm:svn:https://struts2webflow.googlecode.com/svn/tags/struts2webflow-plugin-1.0.5</developerConnection>
-       <url>http://struts2webflow.googlecode.com/svn/tags/struts2webflow-plugin-1.0.5</url>
+       <connection>scm:svn:https://struts2webflow.googlecode.com/svn/trunk/</connection>
+       <developerConnection>scm:svn:https://struts2webflow.googlecode.com/svn/trunk/</developerConnection>
+       <url>http://struts2webflow.googlecode.com/svn/trunk/</url>
     </scm>
 	<dependencies>
 		<dependency>
