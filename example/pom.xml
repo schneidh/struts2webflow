@@ -3,7 +3,7 @@
 	<groupId>com.google.code.struts2webflow</groupId>
 	<artifactId>struts2webflow-example</artifactId>
 	<packaging>war</packaging>
-	<version>1.0.5-SNAPSHOT</version>
+	<version>1.0.6-SNAPSHOT</version>
 	<name>Struts2 Spring Webflow Example</name>
 	<build>
         <plugins>
