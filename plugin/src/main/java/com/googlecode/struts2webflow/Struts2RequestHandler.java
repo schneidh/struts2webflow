@@ -4,8 +4,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.webflow.context.ExternalContext;
 import org.springframework.webflow.core.FlowException;
+import org.springframework.webflow.engine.NoMatchingTransitionException;
+import org.springframework.webflow.executor.FlowExecutionResult;
 import org.springframework.webflow.executor.FlowExecutor;
-import org.springframework.webflow.executor.ResponseInstruction;
 
 /** */
 public class Struts2RequestHandler {
@@ -22,8 +23,6 @@ public class Struts2RequestHandler {
 
     private String flowExecutionKey;
 
-    private String eventId;
-
     /**
      * Creates a new WebworkRequestHandler.
      */
@@ -39,49 +38,38 @@ public class Struts2RequestHandler {
      * @throws FlowException
      *             if a flow exception happens
      */
-    public ResponseInstruction handleFlowRequest(ExternalContext context)
+    public FlowExecutionResult handleFlowRequest(ExternalContext context)
         throws FlowException {
+    	
         if(logger.isDebugEnabled()) {
             logger.debug("Request initiated by " + context);
         }
+		        
+        FlowExecutionResult response;
+        
         if(flowExecutionKey != null) {
-            if(eventId != null) {
-                ResponseInstruction response = flowExecutor.resume(
-                    flowExecutionKey, eventId, context);
-                if(logger.isDebugEnabled()) {
-                    logger.debug("Returning [resume] " + response);
-                }
-                return response;
-            } else {
-                ResponseInstruction response = flowExecutor.refresh(
-                    flowExecutionKey, context);
-                if(logger.isDebugEnabled()) {
-                    logger.debug("Returning [refresh] " + response);
-                }
-                return response;
-            }
+        	
+        	try {
+        		response = flowExecutor.resumeExecution( flowExecutionKey, context);
+
+        		if(logger.isDebugEnabled()) {
+        			logger.debug("Returning [resume] " + response);
+        		}
+
+        	} catch (NoMatchingTransitionException e) {
+        		throw e;
+        	}
+        
         } else {
-            ResponseInstruction response = flowExecutor.launch(flowId,
-                context);
-            if(logger.isDebugEnabled()) {
+        	
+        	response = flowExecutor.launchExecution(flowId, context.getRequestMap(), context);
+            
+        	if(logger.isDebugEnabled()) {
                 logger.debug("Returning [launch] " + response);
             }
-            return response;
         }
-    }
 
-    /**
-     * @return eventId
-     */
-    public String getEventId() {
-        return eventId;
-    }
-
-    /**
-     * @param eventId
-     */
-    public void setEventId(String eventId) {
-        this.eventId = eventId;
+        return response;
     }
 
     /**

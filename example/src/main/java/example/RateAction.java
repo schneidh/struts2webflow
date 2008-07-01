@@ -1,6 +1,7 @@
 package example;
 
 import com.googlecode.struts2webflow.annotations.FlowIn;
+import com.googlecode.struts2webflow.annotations.FlowOut;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
@@ -14,6 +15,7 @@ public class RateAction extends ActionSupport {
     /**
      * The calculated insurance rate.
      */
+    @FlowOut
     private int rate;
 
     public String execute() throws Exception {

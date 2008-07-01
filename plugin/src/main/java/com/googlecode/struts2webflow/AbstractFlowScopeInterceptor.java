@@ -14,10 +14,9 @@ import org.springframework.webflow.context.ExternalContext;
 import org.springframework.webflow.context.ExternalContextHolder;
 import org.springframework.webflow.core.collection.MutableAttributeMap;
 import org.springframework.webflow.execution.FlowExecution;
+import org.springframework.webflow.execution.FlowExecutionKey;
 import org.springframework.webflow.execution.RequestContext;
-import org.springframework.webflow.execution.repository.FlowExecutionKey;
 import org.springframework.webflow.execution.repository.FlowExecutionRepository;
-import org.springframework.webflow.execution.repository.FlowExecutionRestorationFailureException;
 import org.springframework.webflow.executor.FlowExecutor;
 import org.springframework.webflow.executor.FlowExecutorImpl;
 
@@ -112,7 +111,7 @@ public abstract class AbstractFlowScopeInterceptor implements Interceptor,
                     "FlowExecutionKey not found in request or session.");
             }
         }
-        FlowExecutionKey key = repo.parseFlowExecutionKey(flowExecKey);
+		FlowExecutionKey key = repo.parseFlowExecutionKey(flowExecKey);
         FlowExecution flowExecution = repo.getFlowExecution(key);
         MutableAttributeMap attrMap = flowExecution.getActiveSession()
             .getScope();

@@ -10,9 +10,9 @@
 <h3>Acme Price Quote</h3>
 <p>
   <s:form action="FlowAction" method="get">
-  	<s:hidden name="eventId" value="finish"/>
     Your monthly premium would be $<s:property value="rate"/>
-    <s:submit value="Next"/>
+    <s:submit type="button" name="_eventId" value="startOver" label="Start Over"></s:submit>
+    <s:submit type="button" name="_eventId" value="finish" label="Finish"></s:submit>
   </s:form>
 </p>
 </body>

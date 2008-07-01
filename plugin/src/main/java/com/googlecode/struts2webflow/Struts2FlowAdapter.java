@@ -98,7 +98,7 @@ public class Struts2FlowAdapter extends AbstractAction {
         proxy = factory.createActionProxy(finalNamespace, finalActionName,
             extraContext, false, true);
         if(null != finalMethodName) {
-            proxy.setMethod(finalMethodName);
+        	proxy.setMethod(finalMethodName);
         }
         proxy.execute();
         String resultCode = proxy.getInvocation().getResultCode();

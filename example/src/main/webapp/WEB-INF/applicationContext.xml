@@ -1,24 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:flow="http://www.springframework.org/schema/webflow-config"
-       xsi:schemaLocation="
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:flow="http://www.springframework.org/schema/webflow-config"
+	xsi:schemaLocation="
            http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
            http://www.springframework.org/schema/webflow-config
-           http://www.springframework.org/schema/webflow-config/spring-webflow-config-1.0.xsd">
-
-	<!-- Launches new flow executions and resumes existing executions. -->	
-	<flow:executor id="flowExecutor" registry-ref="flowRegistry">
-		<flow:execution-attributes>
-		  <flow:alwaysRedirectOnPause value="false"/>
-		</flow:execution-attributes>
-	</flow:executor>
+           http://www.springframework.org/schema/webflow-config/spring-webflow-config-2.0.xsd">
+	
+	<!-- ============= FLOW SUPPORT ============== -->
+	<!-- Launches new flow executions and resumes existing executions. -->
+	<flow:flow-executor id="flowExecutor" flow-registry="flowRegistry">
+		<flow:flow-execution-attributes>
+			<flow:always-redirect-on-pause value="false"/>
+		</flow:flow-execution-attributes>
+	</flow:flow-executor>
 	
 	<!-- Creates the registry of flow definitions for this application -->
-	<flow:registry id="flowRegistry">
-		<flow:location path="/WEB-INF/flows/**-flow.xml"/>
-	</flow:registry>
+	<flow:flow-registry id="flowRegistry"
+		flow-builder-services="flowBuilderServices">
+		<flow:flow-location path="/WEB-INF/flows/rating-flow.xml"/>
+	</flow:flow-registry>
 	
-	<bean id="struts2FlowAdapter" class="com.googlecode.struts2webflow.Struts2FlowAdapter"></bean>
+	
+	<bean id="struts2FlowAdapter"
+		class="com.googlecode.struts2webflow.Struts2FlowAdapter" />
+
+		<!-- ============= VIEW CONFIG ============== -->
+	<!-- Plugs in a custom creator for Web Flow views -->
+	<flow:flow-builder-services id="flowBuilderServices"
+		view-factory-creator="mvcViewFactoryCreator"/>
+	
+	<!-- Configures Web Flow to use Struts2 views from currenly executing action -->
+	<bean id="mvcViewFactoryCreator"
+		class="org.springframework.webflow.mvc.builder.MvcViewFactoryCreator">
+		<property name="flowViewResolver" ref="struts2ViewResolver"/>
+	</bean>
+	
+	<bean id="struts2ViewResolver"
+		class="com.googlecode.struts2webflow.Struts2ViewResolver">
+	</bean>
+	
+	
+
+
+	<!--
+	<bean id="flow-viewResolver"
+	class="org.springframework.web.servlet.view.XmlViewResolver">
+	<property name="location" value="/WEB-INF/views.xml"/>
+	<property name="order" value="10" />
+	</bean>
+	-->
+	
+	<!-- freemarker config - ->
+	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+	<property name="templateLoaderPath" value="/WEB-INF/etc/"/>
+	</bean>
+	
+	<!- - 
+	
+	View resolvers can also be configured with ResourceBundles or XML files. If you need
+	different view resolving based on Locale, you have to use the resource bundle resolver.
+	
+	- ->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+	<property name="cache" value="false"/>
+	<property name="prefix" value=""/>
+	<property name="suffix" value=""/>
+	
+	<!- - if you want to use the Spring FreeMarker macros, set this property to true - ->
+	<property name="exposeSpringMacroHelpers" value="true"/>
+	
+	</bean>
+	-->
 </beans>

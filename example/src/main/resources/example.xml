@@ -3,41 +3,39 @@
         "http://struts.apache.org/dtds/struts-2.0.dtd">
 
 <struts>
-	<package name="example" namespace="/example"
-		extends="struts-default">
+	<package name="example" namespace="/example" extends="struts-default">
 		<interceptors>
 			<interceptor name="sessionFlowExecKey"
 				class="com.googlecode.struts2webflow.SessionFlowExecKeyInterceptor"/>
 			<interceptor name="annotationflowScope"
 				class="com.googlecode.struts2webflow.annotations.AnnotationFlowScopeInterceptor"/>
 		</interceptors>
+		
 		<action name="FlowAction"
 			class="com.googlecode.struts2webflow.FlowAction">
 			<interceptor-ref name="sessionFlowExecKey" />
 			<interceptor-ref name="defaultStack" />
 			<param name="flowId">rating-flow</param>
-			<result name="ageEnter" type="redirect">
-				AgeEnter.action
-			</result>
-			<result name="ageEnterJSP">/example/enterage.jsp</result>
-			<result name="calcRate" type="redirect">
-				CalcRate.action
-			</result>
+
+			<result name="AgeEnter">/example/enterage.jsp</result>
+			<result name="diplayRate">/example/displayrate.jsp</result>
 			<result name="finish">/example/finished.jsp</result>
 		</action>
 
 		<action name="AgeEnter" class="example.AgeAction">
 			<result>/example/enterage.jsp</result>
+			<!-- /example/enterAge.ftl -->
 		</action>
 
 		<action name="AgeSave" method="save"
 			class="example.AgeAction">
 			<interceptor-ref name="annotationflowScope" />
 			<interceptor-ref name="defaultStack" />
-			<result type="redirect">CalcRate.action</result>
+			<result type="redirect">CalcRate.do</result>
 		</action>
 
-		<action name="CalcRate" class="example.RateAction">
+		<action name="CalcRate" 
+			class="example.RateAction">
 			<interceptor-ref name="annotationflowScope" />
 			<interceptor-ref name="defaultStack" />
 			<result>/example/displayrate.jsp</result>
